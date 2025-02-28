@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
-const Navbar = () => {
+const VendorHomeNavbar = () => {
+
   const [isOnline, setIsOnline] = useState(true);
   const [showConfirm, setShowConfirm] = useState(false);
   const [pendingStatus, setPendingStatus] = useState(null);
@@ -92,4 +93,5 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default VendorHomeNavbar;
+
