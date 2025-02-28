@@ -8,7 +8,7 @@ const goaCities = [
 ];
 
 const UserSchema = new mongoose.Schema({
-  auth0Id: { type: String, required: true, unique: true }, // Auth0 User ID
+  // auth0Id: { type: String, required: true, unique: true }, // Auth0 User ID
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   phone: { type: String, required: true },
