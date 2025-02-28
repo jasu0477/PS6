@@ -1,16 +1,33 @@
-import {Router} from "express"
-import { getAllVendors,setupProfile,getProfile,editprofile,bookVendor,getNotifications,getMyBookings,getVendorDetails } from "../controllers/user.controllers"
 
-const router = Router();    
-router.get("/vendors",getAllVendors)
-router.post("/profile/setup", verifyAuth0, setupProfile);
-router.get("/profile", verifyAuth0, getProfile);
-router.patch("/profile/edit", verifyAuth0, editprofile);
-router.get("/vendor/details/:id", getVendorDetails);
-router.post("/book-vendor",verifyAuth0, bookVendor);
-router.get("/notifications",verifyAuth0, getNotifications);
-router.get("/bookings",verifyAuth0, getMyBookings);
+import { Router } from "express";
+import {
+  getAllVendors,
+  setupProfile,
+  getProfile,
+  editProfile,
+  bookVendor,
+  getNotifications,
+  getMyBookings,
+  getVendorDetails
+} from "../controllers/user.controllers.js";
 
 
+const router = Router();
 
-export default router;  
+// Public route - Anyone can view vendors
+router.get("/vendors", getAllVendors); 
+router.get("/vendors/:vendorId", getVendorDetails); // More RESTful vendor details route
+
+// Profile-related routes (users send their userId in the request body)
+router.post("/profile/setup", setupProfile);
+router.get("/profile", getProfile);
+router.patch("/profile", editProfile); // PATCH for updates (consistent naming)
+
+// Booking routes
+router.post("/bookings", bookVendor); // More RESTful endpoint
+router.get("/my-bookings", getMyBookings); // Avoids conflict with bookings creation
+
+// Notifications
+router.get("/notifications", getNotifications);
+
+export default router;

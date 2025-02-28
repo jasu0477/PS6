@@ -1,3 +1,4 @@
+
 import React from "react";
 import Navbar from "../../components/User/UserHomePage/Navbar";
 import FAQItem from "../../components/Vendor/VendorHelpPage/FAQItem";
@@ -89,4 +90,3 @@ const globalStyles = `
 `;
 
 export default UserHelpPage;
-
