@@ -3,7 +3,7 @@ import {
   getVendorById,
   vendorProfile,
   toggleAvailability,
-  getVendorNotifications,
+  // getVendorNotifications,
   startTimer,
   stopTimer,
   completeBooking,
@@ -33,6 +33,6 @@ router.post("/complete-work/:bookingId", completeBooking); // Mark work as compl
 
 // Vendor Stats & Notifications
 router.get("/stats", statsController); // Fetch vendor stats
-router.get("/notifications", getVendorNotifications); // Fetch vendor notifications
+// router.get("/notifications", getVendorNotifications); // Fetch vendor notifications
 
 export default router;
