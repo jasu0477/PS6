@@ -1,15 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MiniNavbar from "../../components/Others/MiniNavbar";
 import VendorCard from "../../components/User/ServicePage/VendorCard";
 import FilterComp from "../../components/User/ServicePage/FilterComp";
 import { Filter, Home } from "lucide-react";
-
-const goaCities = [
-  "Panaji", "Margao", "Vasco da Gama", "Mapusa", "Ponda",
-  "Bicholim", "Curchorem", "Sanquelim", "Canacona", "Quepem",
-  "Sanguem", "Porvorim", "Tiswadi", "Dabolim", "Calangute",
-  "Candolim", "Siolim", "Colva", "Anjuna", "Assagao",
-];
+import axiosInstance from "../../lib/axios";
+import { useNavigate } from "react-router-dom";
 
 const ServicePage = () => {
   const [showFilter, setShowFilter] = useState(false);
@@ -21,31 +16,33 @@ const ServicePage = () => {
     languagesKnown: [],
   });
 
-  const toggleFilter = () => setShowFilter(!showFilter);
+  const [vendors, setVendors] = useState([]);
 
-  const applyFilters = (selectedFilters) => {
-    console.log("Applying filters:", selectedFilters);
-    setFilters(selectedFilters);
-    setShowFilter(false); // Close filter after applying
+  const navigate = useNavigate();
+
+  const handleGoHome = () => {
+    navigate("/user/home");
+    window.scrollTo(0, 0); // Scrolls to the top
+  };
+  useEffect(() => {
+    fetchVendors();
+  }, [filters.workType]); // Fetch when workType changes
+
+  const fetchVendors = async () => {
+    try {
+      const response = await axiosInstance.get("/api/vendors", {
+        params: { jobType: filters.workType[0] || "" },
+      });
+      setVendors(response.data.data);
+    } catch (error) {
+      console.error("Error fetching vendors:", error);
+      setVendors([]);
+    }
   };
 
-  const vendors = [
-    { id: 1, name: "Rahul Sharma", phone: "9876543210", service: "Plumbing", rating: 4, work: "Pipe fittings, leak repairs, bathroom installations.", location: "Panaji", chargePerHour: 500, languagesKnown: ["Hindi", "English"] },
-    { id: 2, name: "Anjali Verma", phone: "8765432109", service: "Electrical Work", rating: 5, work: "Wiring, fan installations, circuit repairs.", location: "Margao", chargePerHour: 600, languagesKnown: ["Marathi", "English"] },
-    { id: 3, name: "Amit Kumar", phone: "7654321098", service: "Plumbing", rating: 3, work: "Pipe replacements, bathroom repairs.", location: "Vasco da Gama", chargePerHour: 450, languagesKnown: ["Hindi", "Kannada"] },
-  ];
-
-  // Apply filters
-  const filteredVendors = vendors.filter((vendor) => {
-    const workTypeMatch = (filters.workType?.length ?? 0) === 0 || filters.workType.includes(vendor.service);
-    const locationMatch = (filters.location?.length ?? 0) === 0 || filters.location.includes(vendor.location);
-    const ratingMatch = (filters.rating?.length ?? 0) === 0 || filters.rating.some(r => vendor.rating >= r);
-    const chargeMatch = (filters.chargePerHour?.length ?? 0) === 0 || filters.chargePerHour.some(charge => vendor.chargePerHour <= charge);
-    const languageMatch = (filters.languagesKnown?.length ?? 0) === 0 || filters.languagesKnown.some(lang => vendor.languagesKnown.includes(lang));
-  
-    return workTypeMatch && locationMatch && ratingMatch && chargeMatch && languageMatch;
-  });
-  
+  const handleServiceClick = (service) => {
+    setFilters({ ...filters, workType: [service] });
+  };
 
   return (
     <div className="min-h-screen bg-base-200 text-white flex flex-col">
@@ -54,7 +51,7 @@ const ServicePage = () => {
       <div className="flex">
         {showFilter && (
           <FilterComp 
-            applyFilters={applyFilters} 
+            applyFilters={(selectedFilters) => setFilters(selectedFilters)}
             closeFilter={() => setShowFilter(false)} 
             currentFilters={filters} 
           />
@@ -65,21 +62,21 @@ const ServicePage = () => {
             <div className="flex justify-between items-center mb-8">
               <button
                 className="bg-primary px-6 py-3 rounded-lg text-white hover:bg-primary-focus flex items-center gap-2 text-base"
-                onClick={() => window.history.back()}
+                onClick={handleGoHome}
               >
                 <Home size={20} />
                 <span>Go Back to Home</span>
               </button>
 
-              <button onClick={toggleFilter} className="p-3 flex items-center gap-2 rounded-lg hover:bg-base-300 text-base">
+              <button onClick={() => setShowFilter(!showFilter)} className="p-3 flex items-center gap-2 rounded-lg hover:bg-base-300 text-base">
                 <Filter size={24} />
                 <span>Filter</span>
               </button>
             </div>
 
-            {filteredVendors.length > 0 ? (
+            {vendors.length > 0 ? (
               <div className="flex flex-col gap-4">
-                {filteredVendors.map((vendor) => (
+                {vendors.map((vendor) => (
                   <VendorCard key={vendor.id} vendor={vendor} />
                 ))}
               </div>
