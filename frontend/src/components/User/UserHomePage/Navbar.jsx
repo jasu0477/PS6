@@ -1,4 +1,5 @@
 const Navbar = () => {
+
     return (
       <nav className="bg-base-200 p-7 flex items-center justify-between shadow-lg h-24">
         {/* Logo / Company Name */}
