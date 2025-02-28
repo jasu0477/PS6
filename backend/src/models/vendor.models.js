@@ -4,7 +4,7 @@ const languages = [
   "English", "Hindi", "Marathi", "Konkani",];
 
 const VendorSchema = new mongoose.Schema({
-    auth0Id: { type: String, required: true, unique: true }, // Auth0 ID for login
+
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     phone: { type: String, required: true },

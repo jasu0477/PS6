@@ -1,7 +1,5 @@
 import { Router } from "express";
 import {
- 
-  getAllVendors,
   getVendorById,
   vendorProfile,
   toggleAvailability,
@@ -12,24 +10,29 @@ import {
   respondToBookingRequest,
   getUpcomingBookings,
   statsController,
-  
 } from "../controllers/vendor.controllers.js";
-import authMiddleware from "../middlewares/auth.middlewares.js";
+
 
 const router = Router();
 
 
-router.get("/:id", getVendorById); // Public
-router.put("/profile/:id", authMiddleware, vendorProfile); // Protected
-router.patch("/availability/:id", authMiddleware, toggleAvailability); // Protected
 
-router.get("/bookings/:auth0Id", authMiddleware, getUpcomingBookings); // Protected
-router.post("/booking-response/:id", authMiddleware, respondToBookingRequest); // Protected
-router.post("/start-timer/:id", authMiddleware, startTimer); // Protected
-router.post("/stop-timer/:id", authMiddleware, stopTimer); // Protected
-router.post("/complete-work/:id", authMiddleware, completeBooking); // Protected
+// Public route - anyone can view vendor details
+router.get("/:id", getVendorById);
 
-router.get("/stats/:id", authMiddleware, statsController); // Protected
+// Vendor-related routes (vendorId must be sent in req.body or query)
+router.put("/profile", vendorProfile); // Vendor updates profile
+router.patch("/availability", toggleAvailability); // Toggle availability
 
-router.get("/notifications/:id", authMiddleware, getVendorNotifications); // Protected
+// Vendor Bookings
+router.get("/bookings", getUpcomingBookings); // Get vendor's upcoming bookings
+router.post("/booking-response/:bookingId", respondToBookingRequest); // Accept/reject booking
+router.post("/start-timer/:bookingId", startTimer); // Start work timer
+router.post("/stop-timer/:bookingId", stopTimer); // Stop work timer
+router.post("/complete-work/:bookingId", completeBooking); // Mark work as completed
+
+// Vendor Stats & Notifications
+router.get("/stats", statsController); // Fetch vendor stats
+router.get("/notifications", getVendorNotifications); // Fetch vendor notifications
+
 export default router;

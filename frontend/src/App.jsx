@@ -1,7 +1,7 @@
 import React from "react";
 import {Toaster} from "react-hot-toast";
 import { Routes, Route } from "react-router-dom";
-import LandingPage from "./pages/landingPage";
+import LandingPage from "./pages/LandingPage"
 import UserSetupPage from "./pages/User/UserSetupPage";
 import LoginPage from "./pages/LoginPage"
 import UserHomePage from "./pages/UserPages/UserHomePage"
@@ -11,13 +11,13 @@ import UserDetails from "./pages/User/UserDetails"
 import VendorSignupPage from "./pages/Vendor/VendorSignupPage"
 import VendorSetupPage from "./pages/Vendor/VendorSetupPage"
 import VendorHomePage from "./pages/VendorPages/VendorHomePage"
-import VendorWorkPage from "./pages/VendorPages/VendorWorkPage"
-import NotifPage from "./pages/UserPages/NotifPage.jsx"
+import NotifPage from "./pages/UserPages/NotifPage"
 import NotificationPage from "./pages/VendorPages/NotificationPage"
 import VendorDetails from "./pages/Vendor/VendorDetails"
-import HelpPage from "./pages/UserPages/HelpPage.jsx"
+import HelpPage from "./pages/UserPages/HelpPage"
 import VendorHelpPage from "./pages/VendorPages/VendorHelpPage"
 import VendorCheckoutPage from "./pages/VendorPages/VendorCheckoutPage"
+import VendorWorkPage from "./pages/VendorPages/VendorWorkPage"
 
 function App() {
   return (
@@ -41,6 +41,7 @@ function App() {
       <Route path="/vendor/work" element={<VendorWorkPage />} />
       <Route path="/vendor/notifications" element={<NotificationPage />} />
       <Route path="/vendor/profile" element={<VendorDetails />} />
+      <Route path="/vendor/work" element={<VendorWorkPage />} />
       <Route path="/vendor/help" element={<VendorHelpPage />} />
       <Route path="/vendor/checkout" element={<VendorCheckoutPage />} />
     </Routes>

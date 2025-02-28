@@ -3,7 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import connectDB from "./db/index.js";
-import authMiddleware from "./middlewares/auth.middlewares.js";
+import {verifyAuth0Token,} from "./middlewares/auth.middlewares.js";
 
 // Load environment variables
 dotenv.config();
@@ -28,7 +28,7 @@ app.use(cookieParser());
 // Routes
 import authRoutes from "./routes/auth.routes.js";
 app.use("/api/auth", authRoutes);
-app.use(authMiddleware);
+
 
 
 import vendorRoutes from "./routes/vendor.routes.js";
