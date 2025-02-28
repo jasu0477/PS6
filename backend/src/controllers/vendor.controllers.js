@@ -2,7 +2,7 @@ import { Vendor } from "../models/vendor.models.js";
 import { asyncHandler } from "../utils/asyncHandler.utils.js";
 import { ApiResponse } from "../utils/apiResponse.utils.js";   
 import { ApiErrors } from "../utils/apiError.utils.js";
-import { User } from "../models/user.models";
+import { User } from "../models/user.models.js";
 import { Notification } from "../models/notification.models.js";
 import { Booking } from "../models/booking.models.js";
 

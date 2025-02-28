@@ -17,6 +17,7 @@ import VendorDetails from "./pages/Vendor/VendorDetails"
 import HelpPage from "./pages/UserPages/HelpPage"
 import VendorHelpPage from "./pages/VendorPages/VendorHelpPage"
 import VendorCheckoutPage from "./pages/VendorPages/VendorCheckoutPage"
+import VendorWorkPage from "./pages/VendorPages/VendorWorkPage"
 
 function App() {
   return (

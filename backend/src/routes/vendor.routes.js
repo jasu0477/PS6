@@ -1,7 +1,5 @@
 import { Router } from "express";
 import {
- 
-  getAllVendors,
   getVendorById,
   vendorProfile,
   toggleAvailability,

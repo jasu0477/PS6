@@ -1,10 +1,10 @@
-import { User } from "../models/user.models";
-import { Notification } from "../models/notification.models";
-import { asyncHandler } from "../utils/asyncHandler.utils";
-import { ApiResponse } from "../utils/apiResponse.utils";   
-import { ApiErrors } from "../utils/apiError.utils";
-import { Booking } from "../models/booking.models";
-import { Vendor } from "../models/vendor.models";
+import { User } from "../models/user.models.js";
+import { Notification } from "../models/notification.models.js";
+import { asyncHandler } from "../utils/asyncHandler.utils.js";
+import { ApiResponse } from "../utils/apiResponse.utils.js";   
+import { ApiErrors } from "../utils/apiError.utils.js";
+import { Booking } from "../models/booking.models.js";
+import { Vendor } from "../models/vendor.models.js";
 
 
 //profile page

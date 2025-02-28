@@ -1,5 +1,5 @@
 import {Router} from "express"
-import { getAllVendors,setupProfile,getProfile,editprofile,bookVendor,getNotifications,getMyBookings,getVendorDetails } from "../controllers/user.controllers"
+import { getAllVendors,setupProfile,getProfile,editprofile,bookVendor,getNotifications,getMyBookings,getVendorDetails } from "../controllers/user.controllers.js"
 
 const router = Router();    
 router.get("/vendors",getAllVendors)

@@ -1,6 +1,6 @@
-const ServiceCard = ({ title, icon: Icon, description }) => {
+const ServiceCard = ({ title, icon: Icon, description, onClick }) => {
     return (
-      <div className="bg-base-200 shadow-md rounded-xl p-5 w-90 h-60 flex flex-col items-center justify-center text-center 
+      <div onClick={onClick} className="bg-base-200 shadow-md rounded-xl p-5 w-90 h-60 flex flex-col items-center justify-center text-center 
         transition-all duration-300 hover:shadow-primary/10 cursor-pointer">
         <Icon size={60} className="text-primary" />
         <h3 className="text-lg font-bold mt-2">{title}</h3>
@@ -9,4 +9,4 @@ const ServiceCard = ({ title, icon: Icon, description }) => {
     );
   };
   
-  export default ServiceCard;
+export default ServiceCard;

@@ -3,6 +3,7 @@ import BookingCard from '../../components/User/BookingPage/BookingCard';
 import WorkDesc from '../../components/User/BookingPage/WorkDesc';
 import DateTime from '../../components/User/BookingPage/DateTime';
 import MiniNavbar from '../../components/Others/MiniNavbar'
+import { useNavigate } from "react-router-dom";
 
 // Mock vendor data (in a real app this would come from props or context)
 const mockVendor = {
@@ -24,6 +25,8 @@ const BookingPage = () => {
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [bookingConfirmed, setBookingConfirmed] = useState(false);
   
+  const navigate = useNavigate();
+
   // Format date for display
   const formatDate = (dateString) => {
     if (!dateString) return "";
@@ -47,13 +50,13 @@ const BookingPage = () => {
   };
   
   const handleGoHome = () => {
-    // In a real app, this would navigate to the home page
-    // Removed the alert
-    console.log("Navigating to home page");
-    // Navigation code would go here
+    navigate("/user/home");
+    window.scrollTo(0, 0); // Scrolls to the top
   };
   
+  
   return (
+   
     <>
     <MiniNavbar/>
     <div className="container mx-auto px-4 py-6 max-w-2xl">
