@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { XCircle } from "lucide-react"; // Importing the delete icon
 import Navbar from "../../components/User/UserHomePage/Navbar";
@@ -89,4 +88,3 @@ const NotifPage = () => {
 };
 
 export default NotifPage;
-

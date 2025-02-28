@@ -17,6 +17,7 @@ const UserHomePage = () => {
 
   const handleCardClick = (serviceTitle) => {
     navigate(`/user/service?name=${serviceTitle.toLowerCase().replace(/\s+/g, "-")}`);
+
   };
 
   return (

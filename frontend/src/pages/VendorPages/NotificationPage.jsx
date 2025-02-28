@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import VendorHomeNavbar from "../../components/Vendor/VendorHomePage/VendorHomeNavbar";
 import NotificationList from "../../components/Vendor/VendorNotificationPage/NotificationList";
 
 const NotificationPage = () => {
@@ -13,9 +14,15 @@ const NotificationPage = () => {
   ]);
 
   return (
-    <div className="relative bg-[#0b0f19] text-white min-h-screen flex flex-col items-center p-8 overflow-hidden">
-      <h2 className="text-4xl font-bold text-primary mb-6">Notifications</h2>
-      <NotificationList notifications={notifications} />
+    <div className="relative bg-[#0b0f19] text-white min-h-screen flex flex-col">
+      {/* Vendor Navbar */}
+      <VendorHomeNavbar />
+
+      {/* Page Content */}
+      <div className="flex flex-col items-center p-8 mt-20 overflow-hidden">
+        <h2 className="text-4xl font-bold text-primary mb-6">Notifications</h2>
+        <NotificationList notifications={notifications} />
+      </div>
     </div>
   );
 };
