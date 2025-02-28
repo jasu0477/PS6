@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 const VendorHomeNavbar = () => {
+
   const [isOnline, setIsOnline] = useState(true);
   const [showConfirm, setShowConfirm] = useState(false);
   const [pendingStatus, setPendingStatus] = useState(null);
@@ -93,3 +94,4 @@ const VendorHomeNavbar = () => {
 };
 
 export default VendorHomeNavbar;
+

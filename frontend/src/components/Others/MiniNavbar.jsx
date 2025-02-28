@@ -22,5 +22,5 @@ const MiniNavbar = () => {
     </div>
   );
 };
+export default MiniNavbar;
 
-export default MiniNavbar;
