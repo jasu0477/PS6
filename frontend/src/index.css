@@ -101,5 +101,6 @@
     background: rgba(255, 255, 255, 0.05); /* Light transparency */
     backdrop-filter: blur(15px); /* Smooth blur */
     -webkit-backdrop-filter: blur(15px);
+    
   }
   

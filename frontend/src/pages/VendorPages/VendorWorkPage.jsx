@@ -12,11 +12,11 @@ const job = {
 
 const VendorWorkPage = () => {
   return (
-    <div className="bg-[#0b0f19] text-white font-poppins min-h-screen">
+    <div className="bg-[#0b0f19] text-white font-poppins min-h-screen flex flex-col">
       <VendorHomeNavbar />
 
-      {/* Work Details */}
-      <section className="px-8 pt-28 pb-16 max-w-4xl mx-auto">
+      {/* Work Details Section */}
+      <section className="px-8 pt-28 pb-16 max-w-4xl mx-auto flex-1">
         <h2 className="text-4xl font-bold text-primary text-center mb-8">Work Details</h2>
         <WorkDetails job={job} />
         <WorkTimer />

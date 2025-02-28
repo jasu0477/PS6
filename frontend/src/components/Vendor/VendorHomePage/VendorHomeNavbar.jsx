@@ -1,10 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const VendorHomeNavbar = () => {
-
   const [isOnline, setIsOnline] = useState(true);
   const [showConfirm, setShowConfirm] = useState(false);
   const [pendingStatus, setPendingStatus] = useState(null);
+  const navigate = useNavigate();
 
   const handleToggleClick = () => {
     setPendingStatus(!isOnline); // Store the new state temporarily
@@ -18,6 +19,12 @@ const VendorHomeNavbar = () => {
     setShowConfirm(false);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token"); // Remove authentication token
+    localStorage.removeItem("user"); // Remove stored user info
+    navigate("/login"); // Redirect to login page
+  };
+
   return (
     <>
       {/* Navbar */}
@@ -29,14 +36,30 @@ const VendorHomeNavbar = () => {
 
         {/* Centered Navigation Buttons */}
         <div className="flex gap-10 text-lg">
-          {["Home", "Notifications", "Profile", "Help"].map((item, index) => (
-            <button
-              key={index}
-              className="hover:text-primary transition-all duration-300 hover:scale-110"
-            >
-              {item}
-            </button>
-          ))}
+          <button
+            onClick={() => navigate("/vendor/home")}
+            className="hover:text-primary transition-all duration-300 hover:scale-110"
+          >
+            Home
+          </button>
+          <button
+            onClick={() => navigate("/vendor/notifications")}
+            className="hover:text-primary transition-all duration-300 hover:scale-110"
+          >
+            Notifications
+          </button>
+          <button
+            onClick={() => navigate("/vendor/profile")}
+            className="hover:text-primary transition-all duration-300 hover:scale-110"
+          >
+            Profile
+          </button>
+          <button
+            onClick={() => navigate("/vendor/help")}
+            className="hover:text-primary transition-all duration-300 hover:scale-110"
+          >
+            Help
+          </button>
         </div>
 
         {/* Online/Offline Toggle and Logout */}
@@ -59,7 +82,10 @@ const VendorHomeNavbar = () => {
           </div>
 
           {/* Logout Button */}
-          <button className="bg-red-600 text-white px-4 py-2 rounded-lg transition hover:bg-red-400">
+          <button
+            onClick={handleLogout}
+            className="bg-red-600 text-white px-4 py-2 rounded-lg transition hover:bg-red-400"
+          >
             Logout
           </button>
         </div>
@@ -94,4 +120,3 @@ const VendorHomeNavbar = () => {
 };
 
 export default VendorHomeNavbar;
-
