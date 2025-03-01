@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "../../components/User/UserHomePage/Navbar";
 import FAQItem from "../../components/Vendor/VendorHelpPage/FAQItem";
-
+import Footer from "../../components/Others/Footer"
 const faqs = [
   { 
     question: "How do I book a service?", 
@@ -67,6 +67,7 @@ const UserHelpPage = () => {
           </div>
         </div>
       </section>
+      <Footer/>
     </div>
   );
 };

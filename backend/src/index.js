@@ -14,7 +14,9 @@ const app = express();
 // Fix CORS issue
 app.use(
   cors({
-
+    origin: "http://localhost:5173", // Allow frontend requests
+    methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
+    credentials: true, // Allow cookies if needed
   })
 );
 

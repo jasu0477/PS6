@@ -8,7 +8,8 @@ import {
   bookVendor,
   getNotifications,
   getMyBookings,
-  getVendorDetails
+  getVendorDetails,
+  getFilteredVendors
 } from "../controllers/user.controllers.js";
 
 
@@ -16,6 +17,7 @@ const router = Router();
 
 // Public route - Anyone can view vendors
 router.get("/vendors", getAllVendors); 
+router.get("/filtered-vendors", getFilteredVendors);
 router.get("/vendors/:vendorId", getVendorDetails); // More RESTful vendor details route
 
 // Profile-related routes (users send their userId in the request body)

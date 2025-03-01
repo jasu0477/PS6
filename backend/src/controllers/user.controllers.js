@@ -72,16 +72,15 @@ export const editProfile = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, updatedUser, "Profile updated successfully"));
 });
 
-// Get all vendors
 export const getAllVendors = asyncHandler(async (req, res) => {
-    const { jobType, city, rating, language } = req.query;
+    const { serviceType, city, rating, language } = req.query;
 
-    let filter = { role: "vendor", verified: true };
+    let filter = { status: "verified" }; // Adjusted to match your DB field
 
-    if (jobType) filter.jobType = jobType;
+    if (serviceType) filter.serviceType = serviceType; // Fixed field name
     if (city) filter.city = city;
-    if (rating) filter.rating = { $gte: rating };
-    if (language) filter.language = language;
+    if (rating) filter.rating = { $gte: parseFloat(rating) }; // Convert to number
+    if (language) filter.language = { $in: [language] }; // Works for array
 
     const vendors = await Vendor.find(filter);
 
@@ -91,6 +90,31 @@ export const getAllVendors = asyncHandler(async (req, res) => {
 
     res.status(200).json(new ApiResponse(200, vendors, "List of vendors"));
 });
+
+// filteredVendors.controller.js
+export const getFilteredVendors = asyncHandler(async (req, res) => {
+  const { serviceType, city, rating, language } = req.query;
+
+  let filter = { status: "verified" }; // Adjusted to match your DB field
+
+  // Add filters if they exist in the query
+  if (serviceType) filter.serviceType = serviceType; // Filter by serviceType
+  if (city) filter.city = city; // Filter by city
+  if (rating) filter.rating = { $gte: parseFloat(rating) }; // Filter by rating
+  if (language) filter.language = { $in: [language] }; // Filter by language (array)
+
+  // Fetch vendors from the database based on filter
+  const vendors = await Vendor.find(filter);
+
+  // If no vendors are found, throw a 404 error
+  if (!vendors.length) {
+    throw new ApiErrors(404, "No vendors found.");
+  }
+
+  // Send the filtered list of vendors as the response
+  res.status(200).json(new ApiResponse(200, vendors, "List of filtered vendors"));
+});
+
 
 // Get vendor details
 export const getVendorDetails = asyncHandler(async (req, res) => {
