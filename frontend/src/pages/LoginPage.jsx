@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Phone, Lock, ChevronDown, Eye, EyeOff } from "lucide-react"; // Using Lucide for icons
+import { useNavigate } from "react-router-dom";
+import { Phone, Lock, Eye, EyeOff } from "lucide-react"; // Using Lucide for icons
 import MiniNavbar from "../components/Others/MiniNavbar";
 
 const Login = () => {
@@ -11,6 +12,7 @@ const Login = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate(); // Hook for navigation
 
   const handleChange = (e) => {
     setLoginData({ ...loginData, [e.target.name]: e.target.value });
@@ -18,7 +20,7 @@ const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    
+
     // Validation: Ensure all fields are filled
     if (!loginData.phone || !loginData.password || !loginData.role) {
       setErrorMessage("All fields are required.");
@@ -26,8 +28,16 @@ const Login = () => {
     }
 
     setErrorMessage(""); // Clear error if valid
+
     console.log("Login Data:", loginData);
     alert("Login Successful!");
+
+    // Redirect based on role
+    if (loginData.role === "user") {
+      navigate("/user/home");
+    } else if (loginData.role === "vendor") {
+      navigate("/vendor/home");
+    }
   };
 
   return (
@@ -49,7 +59,9 @@ const Login = () => {
           <form onSubmit={handleLogin} className="space-y-6">
             {/* Phone Number */}
             <div>
-              <label className="block text-lg font-semibold">Phone Number <span className="text-red-500">*</span></label>
+              <label className="block text-lg font-semibold">
+                Phone Number <span className="text-red-500">*</span>
+              </label>
               <div className="relative">
                 <input
                   type="tel"
@@ -65,7 +77,9 @@ const Login = () => {
 
             {/* Password with Show/Hide Toggle */}
             <div>
-              <label className="block text-lg font-semibold">Password <span className="text-red-500">*</span></label>
+              <label className="block text-lg font-semibold">
+                Password <span className="text-red-500">*</span>
+              </label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -92,7 +106,9 @@ const Login = () => {
 
             {/* Role Selection - Dropdown */}
             <div>
-              <label className="block text-lg font-semibold">Role <span className="text-red-500">*</span></label>
+              <label className="block text-lg font-semibold">
+                Role <span className="text-red-500">*</span>
+              </label>
               <div className="relative">
                 <select
                   name="role"

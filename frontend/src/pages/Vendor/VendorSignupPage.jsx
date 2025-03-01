@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { User, Phone, Lock, Eye, EyeOff } from "lucide-react"; // Icons from lucide-react
 import MiniNavbar from "../../components/Others/MiniNavbar"; // Import Mini Navbar
 
@@ -11,6 +12,7 @@ const VendorSignup = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate(); // Hook for navigation
 
   const handleChange = (e) => {
     setVendorData({ ...vendorData, [e.target.name]: e.target.value });
@@ -28,6 +30,9 @@ const VendorSignup = () => {
     setErrorMessage(""); // Clear error if valid
     console.log("Vendor Signup Data:", vendorData);
     alert("Vendor Signup Successful!");
+
+    // Redirect to Vendor Setup Page
+    navigate("/vendor/setup");
   };
 
   return (
