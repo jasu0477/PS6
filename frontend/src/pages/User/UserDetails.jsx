@@ -12,10 +12,10 @@ const goaCities = [
 
 const UserProfile = () => {
   const [userData, setUserData] = useState({
-    name: "John Doe",
-    address: "123 Street, Goa",
+    name: "Aryan Naik",
+    address: "Vasant Vihar, Goa",
     city: "Panaji",
-    phone: "+91 98765 43210",
+    phone: "+91 7895436782",
     profilePhoto: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", // Default dummy image
   });
 
