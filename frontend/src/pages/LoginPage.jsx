@@ -15,7 +15,7 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate(); // Hook for navigation
 
-  const navigate = useNavigate(); // Initialize useNavigate
+
 
   const handleChange = (e) => {
     setLoginData({ ...loginData, [e.target.name]: e.target.value });
