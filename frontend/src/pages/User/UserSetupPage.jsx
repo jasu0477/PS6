@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Home, Phone, UserCheck, Lock, Eye, EyeOff, MapPin } from "lucide-react";
+import { toast } from "react-hot-toast";
 import MiniNavbar from "../../components/Others/MiniNavbar";
 
 const goaCities = [
   "Panaji", "Margao", "Vasco da Gama", "Mapusa", "Ponda",
   "Bicholim", "Curchorem", "Sanquelim", "Canacona", "Quepem",
   "Sanguem", "Porvorim", "Tiswadi", "Dabolim", "Calangute",
-  "Candolim", "Siolim", "Colva", "Anjuna",  "Assagao",
+  "Candolim", "Siolim", "Colva", "Anjuna", "Assagao",
 ];
 
 const UserSetup = () => {
@@ -36,9 +37,19 @@ const UserSetup = () => {
     }
 
     setErrorMessage("");
-    console.log("User Profile Data:", userData);
-    alert("User Profile Setup Successful!");
-    navigate("/login"); // Redirect to login page
+    toast.success("User Profile Setup Successful!", {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+    });
+    
+    setTimeout(() => {
+      navigate("/login");
+    }, 2500); // Redirect after 2.5 seconds
   };
 
   return (
