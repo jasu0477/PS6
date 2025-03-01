@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { Phone, Lock, ChevronDown, Eye, EyeOff } from "lucide-react"; // Using Lucide for icons
+import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { Phone, Lock, Eye, EyeOff } from "lucide-react";
 import MiniNavbar from "../components/Others/MiniNavbar";
+import { toast, Toaster } from "react-hot-toast"; // Correct import for react-hot-toast
 
 const Login = () => {
   const [loginData, setLoginData] = useState({
@@ -12,42 +14,46 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+  const navigate = useNavigate(); // Initialize useNavigate
+
   const handleChange = (e) => {
     setLoginData({ ...loginData, [e.target.name]: e.target.value });
   };
 
   const handleLogin = (e) => {
     e.preventDefault();
-    
-    // Validation: Ensure all fields are filled
+
+    // Check if all fields are filled
     if (!loginData.phone || !loginData.password || !loginData.role) {
       setErrorMessage("All fields are required.");
       return;
     }
 
-    setErrorMessage(""); // Clear error if valid
+    setErrorMessage("");
+
     console.log("Login Data:", loginData);
-    alert("Login Successful!");
+    toast.success("Login Successful!"); // Use react-hot-toast's success notification
+
+    // Redirect based on role after successful login
+    if (loginData.role === "vendor") {
+      navigate("/vendor/home"); // Navigate to vendor home page if role is 'vendor'
+    }
+    // You can add additional logic for other roles like 'user' if necessary
   };
 
   return (
     <div className="min-h-screen bg-base-200">
-      {/* Mini Navbar */}
       <MiniNavbar />
 
-      {/* Login Container */}
       <div className="flex items-center justify-center min-h-[calc(100vh-64px)]">
         <div className="w-full max-w-lg bg-base-300 shadow-lg p-8 rounded-lg">
           <h2 className="text-4xl font-bold text-center text-base-content mb-6">Login</h2>
 
-          {/* Error Message */}
           {errorMessage && (
             <div className="text-red-500 text-center font-semibold mb-4">{errorMessage}</div>
           )}
 
-          {/* Login Form */}
           <form onSubmit={handleLogin} className="space-y-6">
-            {/* Phone Number */}
             <div>
               <label className="block text-lg font-semibold">Phone Number <span className="text-red-500">*</span></label>
               <div className="relative">
@@ -63,7 +69,6 @@ const Login = () => {
               </div>
             </div>
 
-            {/* Password with Show/Hide Toggle */}
             <div>
               <label className="block text-lg font-semibold">Password <span className="text-red-500">*</span></label>
               <div className="relative">
@@ -90,7 +95,6 @@ const Login = () => {
               </div>
             </div>
 
-            {/* Role Selection - Dropdown */}
             <div>
               <label className="block text-lg font-semibold">Role <span className="text-red-500">*</span></label>
               <div className="relative">
@@ -108,7 +112,6 @@ const Login = () => {
               </div>
             </div>
 
-            {/* Login Button (Centered) */}
             <div className="flex justify-center">
               <button type="submit" className="btn btn-primary text-lg px-12">
                 Login
@@ -117,6 +120,8 @@ const Login = () => {
           </form>
         </div>
       </div>
+
+      <Toaster /> {/* Add Toaster to display notifications */}
     </div>
   );
 };

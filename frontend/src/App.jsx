@@ -23,7 +23,7 @@ function App() {
   return (
     <div className="bg-base-200 min-h-screen">
       {/* Global Toaster for notifications */}
-      <Toaster position="center" reverseOrder={false} />
+      {/* <Toaster position="center" reverseOrder={false} /> */}
 
       <Routes>
       <Route index path="/" element={<LandingPage />} />
