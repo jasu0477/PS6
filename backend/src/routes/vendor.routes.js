@@ -10,7 +10,10 @@ import {
   respondToBookingRequest,
   getUpcomingBookings,
   statsController,
+  registerVendor,
+  setupVendorProfile,
 } from "../controllers/vendor.controllers.js";
+
 
 
 const router = Router();
@@ -22,7 +25,9 @@ router.get("/:id", getVendorById);
 
 // Vendor-related routes (vendorId must be sent in req.body or query)
 router.put("/profile", vendorProfile); // Vendor updates profile
+router.put("/setup", setupVendorProfile); // Vendor sets up profile
 router.patch("/availability", toggleAvailability); // Toggle availability
+router.post("/signup", registerVendor); // Vendor signup
 
 // Vendor Bookings
 router.get("/bookings", getUpcomingBookings); // Get vendor's upcoming bookings

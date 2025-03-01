@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const VendorHomeNavbar = () => {
+const VendorHomeNavbar = ({ onToggleStatus }) => {
   const [isOnline, setIsOnline] = useState(true);
   const [showConfirm, setShowConfirm] = useState(false);
   const [pendingStatus, setPendingStatus] = useState(null);
@@ -14,7 +14,10 @@ const VendorHomeNavbar = () => {
 
   const confirmToggle = (confirm) => {
     if (confirm) {
-      setIsOnline(pendingStatus); // Apply the change
+      setIsOnline(pendingStatus); // Apply the change locally
+      if (onToggleStatus) {
+        onToggleStatus(pendingStatus); // Tell the parent component
+      }
     }
     setShowConfirm(false);
   };
@@ -44,9 +47,10 @@ const VendorHomeNavbar = () => {
           </button>
           <button
             onClick={() => navigate("/vendor/notifications")}
-            className="hover:text-primary transition-all duration-300 hover:scale-110"
+            className="hover:text-primary transition-all duration-300 hover:scale-110 relative"
           >
-            Notifications
+            Work
+            <span className="absolute -top-1 -right-2 h-2 w-2 bg-red-500 rounded-full animate-pulse"></span>
           </button>
           <button
             onClick={() => navigate("/vendor/profile")}
