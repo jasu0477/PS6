@@ -18,6 +18,8 @@ import HelpPage from "./pages/UserPages/HelpPage"
 import VendorHelpPage from "./pages/VendorPages/VendorHelpPage"
 import VendorCheckoutPage from "./pages/VendorPages/VendorCheckoutPage"
 import VendorWorkPage from "./pages/VendorPages/VendorWorkPage"
+import AdminLoginPage from "./pages/Admin/AdminLoginPage"
+import AdminVerificationPage from "./pages/Admin/AdminVerificationPage"
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
 
       <Routes>
       <Route index path="/" element={<LandingPage />} />
+      <Route index path="/admin" element={<AdminLoginPage />} />
+      <Route index path="/admin/verify" element={<AdminVerificationPage />} />
       <Route path="/user/setup" element={<UserSetupPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/user/home" element={<UserHomePage />} />
@@ -50,4 +54,4 @@ function App() {
   );
 }
 
-export default App;
+export default App;
