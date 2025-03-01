@@ -7,17 +7,17 @@ import toast from "react-hot-toast";
 const initialVendors = [
   {
     id: 1,
-    name: "John's Plumbing",
+    name: "Vijay Karad",
     phone: "+91 98765 43210",
     type: "Plumber",
     skills: ["Pipe Repair", "Leak Fixing", "Bathroom Fittings"],
-    certificate: "https://via.placeholder.com/200",
-    verificationProof: "https://via.placeholder.com/200",
+    certificate: "https://www.sharpiti.com/images/img/4.jpg",
+    verificationProof: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrQ52umQKKsFga4-mEcGCyxnyKcI9yHKD00g&s",
     status: "Pending",
   },
   {
     id: 2,
-    name: "Sara's Carpentry",
+    name: "Vikram Seth",
     phone: "+91 91234 56789",
     type: "Carpenter",
     skills: ["Furniture Making", "Wood Polishing", "Cabinet Repairs"],
@@ -27,7 +27,7 @@ const initialVendors = [
   },
   {
     id: 3,
-    name: "Mike's Electricals",
+    name: "Arun Naik",
     phone: "+91 99887 66554",
     type: "Electrician",
     skills: ["Wiring", "Lighting Installation", "Fuse Repair"],
