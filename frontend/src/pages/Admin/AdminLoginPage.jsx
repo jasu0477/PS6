@@ -42,7 +42,7 @@ const AdminLogin = () => {
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
-                  placeholder="••••••••"
+                  placeholder=""
                   className="input input-bordered w-full bg-base-100 text-lg p-3 pl-12 pr-12"
                   required
                 />
