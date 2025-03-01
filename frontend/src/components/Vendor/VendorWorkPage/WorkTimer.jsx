@@ -30,16 +30,17 @@ const WorkTimer = () => {
   const [time, setTime] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalConfig, setModalConfig] = useState({ title: "", message: "", confirmText: "Confirm", onConfirm: () => {} });
+  const [isPaused, setIsPaused] = useState(false); // Track if the timer is paused
   const navigate = useNavigate();
 
   useEffect(() => {
     let timer;
-    if (isRunning) {
+    if (isRunning && !isPaused) {
       const startTime = Date.now() - time;
       timer = setInterval(() => setTime(Date.now() - startTime), 10);
     }
     return () => clearInterval(timer);
-  }, [isRunning]);
+  }, [isRunning, isPaused, time]);
 
   const formatTime = (milliseconds) => {
     const hrs = Math.floor(milliseconds / 3600000);
@@ -59,14 +60,26 @@ const WorkTimer = () => {
     setModalOpen(false);
   });
 
-  const stopTimer = () => openModal("Stop Timer", "Confirm stop and move to checkout?", "Checkout", () => {
+  const stopTimer = () => {
+    // Pause the timer when stop is clicked
     setIsRunning(false);
+    setIsPaused(true); // Mark as paused
+    openModal("Stop Timer", "Confirm stop and move to checkout?", "Checkout", () => {
+      setIsPaused(false); // Timer is now stopped, do not resume
+      navigate("/vendor/checkout", { state: { timeWorked: time } });
+    });
+  };
+
+  const resumeTimer = () => {
+    // Resume the timer from the paused state
+    setIsPaused(false);
+    setIsRunning(true);
     setModalOpen(false);
-    navigate("/vendor/checkout", { state: { timeWorked: time } });
-  });
+  };
 
   const resetTimer = () => openModal("Reset Timer", "Confirm timer reset?", "Reset", () => {
     setIsRunning(false);
+    setIsPaused(false); // Reset the paused state as well
     setTime(0);
     setModalOpen(false);
   });
@@ -80,10 +93,10 @@ const WorkTimer = () => {
       <h3 className="text-2xl font-semibold text-primary mb-4">Job Timer</h3>
       <p className="text-5xl font-mono text-gray-300">{formatTime(time)}</p>
       <div className="mt-6 flex gap-6">
-        <button onClick={startTimer} className={`btn btn-success flex items-center gap-2 ${isRunning ? "opacity-50 cursor-not-allowed" : ""}`} disabled={isRunning}>
+        <button onClick={startTimer} className={`btn btn-success flex items-center gap-2 ${isRunning && !isPaused ? "opacity-50 cursor-not-allowed" : ""}`} disabled={isRunning && !isPaused}>
           <LucidePlay size={20} /> Start
         </button>
-        <button onClick={stopTimer} className={`btn btn-error flex items-center gap-2 ${!isRunning ? "opacity-50 cursor-not-allowed" : ""}`} disabled={!isRunning}>
+        <button onClick={stopTimer} className={`btn btn-error flex items-center gap-2 ${!isRunning || isPaused ? "opacity-50 cursor-not-allowed" : ""}`} disabled={!isRunning || isPaused}>
           <LucideStopCircle size={20} /> Stop
         </button>
       </div>

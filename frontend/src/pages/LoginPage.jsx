@@ -15,7 +15,11 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate(); // Hook for navigation
 
-  
+
+
+
+
+
 
   const handleChange = (e) => {
     setLoginData({ ...loginData, [e.target.name]: e.target.value });
@@ -32,13 +36,15 @@ const Login = () => {
     setErrorMessage("");
 
     console.log("Login Data:", loginData);
-    toast.success("Login Successful!"); // Use react-hot-toast's success notification
+    toast.success("Login Successful!", { duration: 2500, position: "top-center" });
 
-    // Redirect based on role after successful login
-    if (loginData.role === "vendor") {
-      navigate("/vendor/home"); // Navigate to vendor home page if role is 'vendor'
-    }
-    // You can add additional logic for other roles like 'user' if necessary
+    setTimeout(() => {
+      if (loginData.role === "vendor") {
+        navigate("/vendor/home");
+      } else if (loginData.role === "user") {
+        navigate("/user/home"); // Navigate to user home page if role is 'user'
+      }
+    }, 2500);
   };
 
   return (

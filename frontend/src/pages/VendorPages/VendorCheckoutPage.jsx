@@ -1,21 +1,22 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom"; // Import useNavigate
 import QRCode from "react-qr-code";
 import MiniNavbar from "../../components/Others/MiniNavbar"; // Adjust path if needed
 
 const VendorCheckout = () => {
   const location = useLocation();
+  const navigate = useNavigate(); // Initialize navigate
   const { timeWorked = 0 } = location.state || {}; // Get time worked from WorkTimer
 
-  const hourlyRate = 100; // Example rate per hour
-  const perMinuteRate = hourlyRate / 60;
-  const totalMinutes = Math.floor(timeWorked / 60000);
-  const totalCost = totalMinutes * perMinuteRate;
+  const perSecondRate = 0.08; // Cost per second
+  const totalSeconds = Math.floor(timeWorked / 1000); // Convert milliseconds to seconds
+  const totalCost = totalSeconds * perSecondRate;
 
-  const formatTime = (milliseconds) => {
-    const hrs = Math.floor(milliseconds / 3600000);
-    const mins = Math.floor((milliseconds % 3600000) / 60000);
-    const secs = Math.floor((milliseconds % 60000) / 1000);
+  // Function to format time in hh:mm:ss
+  const formatTime = (seconds) => {
+    const hrs = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
     return `${hrs.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
 
@@ -33,6 +34,11 @@ const VendorCheckout = () => {
     setTimeout(() => {
       setShowToast(false);
     }, 3000);
+
+    // Delay for 2 seconds before redirecting to the vendor home page
+    setTimeout(() => {
+      navigate("/vendor/home"); // Navigate to /vendor/home
+    }, 2000);
   };
 
   return (
@@ -62,7 +68,10 @@ const VendorCheckout = () => {
           <div className="bg-base-200 p-4 rounded-xl shadow-lg border-2 border-transparent hover:border-primary transition-all duration-300">
             <h3 className="text-lg font-semibold mb-2">Job Summary</h3>
             <div className="bg-base-100 p-3 rounded-lg space-y-2">
-              <p><span className="font-semibold">Total Time:</span> {formatTime(timeWorked)}</p>
+              {/* Convert timeWorked from milliseconds to seconds and display in hh:mm:ss */}
+              <p><span className="font-semibold">Total Time:</span> {formatTime(totalSeconds)}</p>
+              
+              {/* Calculate total cost by multiplying the total seconds by perSecondRate */}
               <p><span className="font-semibold">Total Cost:</span> ₹{totalCost.toFixed(2)}</p>
             </div>
           </div>

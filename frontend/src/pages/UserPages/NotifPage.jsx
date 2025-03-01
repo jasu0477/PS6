@@ -2,42 +2,47 @@ import React, { useState } from "react";
 import { XCircle } from "lucide-react"; // Importing the delete icon
 import Navbar from "../../components/User/UserHomePage/Navbar";
 
-const NotifPage = () => {
-  // Static notifications (Replace with real-time API data)
-  const [notifications, setNotifications] = useState([
-    {
-      id: 1,
-      vendorName: "John's Plumbing",
-      serviceType: "Plumber",
-      date: "March 5, 2024",
-      time: "10:30 AM",
-      serviceCharge: "₹500",
-      workDescription: "Pipe leakage repair in the kitchen",
-      status: "Accepted",
-    },
-    {
-      id: 2,
-      vendorName: "Sara's Carpentry",
-      serviceType: "Carpenter",
-      date: "March 6, 2024",
-      time: "2:00 PM",
-      serviceCharge: "₹700",
-      workDescription: "Furniture polishing and minor repairs",
-      status: "Completed",
-    },
-    {
-      id: 3,
-      vendorName: "Mike's Electricals",
-      serviceType: "Electrician",
-      date: "March 7, 2024",
-      time: "4:00 PM",
-      serviceCharge: "₹300",
-      workDescription: "Fixing a short circuit in the bedroom",
-      status: "Pending",
-    },
-  ]);
+const mockNotifications = [
+  {
+    id: 1,
+    serviceType: "Plumbing",
+    vendorName: "Arun Patel",
+    location: "Panaji, Goa",
+    date: "March 10, 2025",
+    time: "10:00 AM",
+    serviceCharge: "₹500",
+    workDescription: "Fixing a leaking pipe in the kitchen",
+    status: "Accepted",
+  },
+  {
+    id: 2,
+    serviceType: "Electrical Work",
+    vendorName: "Ravi Kumar",
+    location: "Margao, Goa",
+    date: "March 12, 2025",
+    time: "2:30 PM",
+    serviceCharge: "₹700",
+    workDescription: "Installation of new ceiling fan",
+    status: "Pending",
+  },
+  {
+    id: 3,
+    serviceType: "Carpentry",
+    vendorName: "Vikram Sharma",
+    location: "Vasco da Gama, Goa",
+    date: "March 15, 2025",
+    time: "4:00 PM",
+    serviceCharge: "₹1,200",
+    workDescription: "Repairing and polishing a wooden dining table",
+    status: "Completed",
+  },
+  
+];
 
-  // Function to remove a notification
+const NotifPage = () => {
+  const [notifications, setNotifications] = useState(mockNotifications);
+
+  // Function to remove a notification from the list
   const removeNotification = (id) => {
     setNotifications(notifications.filter((notification) => notification.id !== id));
   };
@@ -64,8 +69,8 @@ const NotifPage = () => {
             >
               <div className="relative">
                 <p className="text-lg font-semibold text-primary">{notification.vendorName}</p>
-                <p className="text-sm text-gray-400">{notification.serviceType}</p>
-                <p className="text-sm">{notification.date} at {notification.time}</p>
+                <p className="text-sm text-gray-400">{notification.serviceType} - {notification.location}</p>
+                <p className="text-sm">Date: {notification.date} at {notification.time}</p>
                 <p className="text-sm text-gray-400">{notification.workDescription}</p>
                 <p className="text-sm font-semibold">Charge: {notification.serviceCharge}</p>
                 <p className={`text-sm font-bold mt-2 
@@ -73,7 +78,7 @@ const NotifPage = () => {
                   {notification.status}
                 </p>
 
-                {/* Clear Notification Button */}
+                {/* Remove Notification Button */}
                 <button onClick={() => removeNotification(notification.id)} 
                   className="absolute top-3 right-3 text-red-400 hover:text-red-500 transition-all">
                   <XCircle className="w-5 h-5" />
