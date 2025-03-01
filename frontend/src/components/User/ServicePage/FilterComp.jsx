@@ -1,147 +1,164 @@
-import { X } from "lucide-react";
-import { useState, useEffect } from "react";
-
-const workTypes = ["Plumbing", "Electrical Work", "Carpentry", "Appliance Repairs", "Home Maintenance"];
-const locations = [
-  "Panaji", "Margao", "Vasco da Gama", "Mapusa", "Ponda",
-  "Bicholim", "Curchorem", "Sanquelim", "Canacona", "Quepem",
-  "Sanguem", "Porvorim", "Tiswadi", "Dabolim", "Calangute",
-  "Candolim", "Siolim", "Colva", "Anjuna", "Assagao",
-];
-const ratings = [1, 2, 3, 4, 5];
-const languages = ["English", "Hindi", "Marathi", "Konkani"];
+import React, { useState, useEffect } from "react";
+import { X } from "lucide-react"; // Icon for the cross button
+import { useLocation, useNavigate } from "react-router-dom";
 
 const FilterComp = ({ applyFilters, closeFilter, currentFilters }) => {
-  const [selectedFilter, setSelectedFilter] = useState("Work Type");
-  const [selectedOptions, setSelectedOptions] = useState({
-    workType: currentFilters?.workType || [],
-    location: currentFilters?.location || [],
-    rating: currentFilters?.rating || [],
-    languagesKnown: currentFilters?.languagesKnown || [],
-  });
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    setSelectedOptions({
-      workType: currentFilters?.workType || [],
-      location: currentFilters?.location || [],
-      rating: currentFilters?.rating || [],
-      languagesKnown: currentFilters?.languagesKnown || [],
-    });
-  }, [currentFilters]);
+  // Extract current filters from URL if available
+  const queryParams = new URLSearchParams(location.search);
+  const initialFilters = {
+    workType: queryParams.getAll("workType") || currentFilters?.workType || [],
+    location: queryParams.getAll("location") || currentFilters?.location || [],
+    rating: queryParams.getAll("rating") || currentFilters?.rating || [],
+    languagesKnown: queryParams.getAll("languagesKnown") || currentFilters?.languagesKnown || [],
+    price: queryParams.getAll("price") || currentFilters?.price || [],
+  };
 
-  const handleOptionChange = (category, option) => {
-    setSelectedOptions((prev) => {
-      const updatedCategory = prev[category] ? [...prev[category]] : [];
-      const updatedOptions = updatedCategory.includes(option)
-        ? updatedCategory.filter((item) => item !== option)
-        : [...updatedCategory, option];
-  
-      return {
-        ...prev,
-        [category]: category === "rating" ? updatedOptions.map((r) => parseInt(r)) : updatedOptions,
+  const [selectedOptions, setSelectedOptions] = useState(initialFilters);
+
+  const workTypes = ["Plumbing", "Electrical Work", "Carpentry", "Appliance Repairs", "Home Maintenance"];
+  const locations = [
+    "Panaji", "Margao", "Vasco da Gama", "Mapusa", "Ponda",
+    "Bicholim", "Curchorem", "Sanquelim", "Canacona", "Quepem",
+    "Sanguem", "Porvorim", "Tiswadi", "Dabolim", "Calangute",
+    "Candolim", "Siolim", "Colva", "Anjuna", "Assagao",
+  ];
+  const ratings = [1, 2, 3, 4]; // Rating: 1+, 2+, 3+, 4+
+  const languages = ["English", "Hindi", "Marathi", "Konkani"];
+  const prices = [
+    "Under 300",
+    "Under 400",
+    "Under 500",
+    "500 & Above",
+  ];
+
+  // Update URL when filters change
+  const updateURL = (newFilters) => {
+    const query = new URLSearchParams(newFilters).toString();
+    navigate(`?${query}`);
+  };
+
+  const handleFilterChange = (filterType, option) => {
+    setSelectedOptions((prevState) => {
+      const updatedSelection = prevState[filterType]?.includes(option)
+        ? prevState[filterType].filter((item) => item !== option)
+        : [...prevState[filterType], option];
+
+      const newFilters = {
+        ...prevState,
+        [filterType]: updatedSelection,
       };
+      updateURL(newFilters); // Update the URL with the new filters
+      return newFilters;
     });
   };
 
   const handleApplyFilters = () => {
-    applyFilters({
-      workType: selectedOptions.workType,
-      location: selectedOptions.location,
-      rating: selectedOptions.rating.map((r) => parseInt(r)),
-      languagesKnown: selectedOptions.languagesKnown,
-    });
+    applyFilters(selectedOptions);
+    updateURL(selectedOptions); // Ensure URL is updated when filters are applied
   };
 
   return (
-    <div className="fixed left-0 top-20 h-full w-96 bg-base-300 p-4 shadow-lg flex">
-      <div className="w-1/2 pr-2 border-r border-gray-500">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold">Filters</h3>
-          <button onClick={closeFilter} className="p-2 hover:bg-base-400 rounded-full">
-            <X size={24} />
-          </button>
+    <div className="bg-base-200 text-white p-6 w-full md:w-96">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-lg font-bold">Apply Filters</h2>
+        <button
+          className="text-white"
+          onClick={closeFilter}
+        >
+          <X size={24} />
+        </button>
+      </div>
+
+      <div className="flex flex-col gap-4">
+        {/* Work Type Filter */}
+        <div className="flex">
+          <div className="w-1/3 pr-4">
+            <h3 className="font-semibold">Work Type</h3>
+            {workTypes.map((type) => (
+              <label key={type} className="block">
+                <input
+                  type="checkbox"
+                  checked={selectedOptions.workType.includes(type)}
+                  onChange={() => handleFilterChange("workType", type)}
+                />
+                {type}
+              </label>
+            ))}
+          </div>
+
+          {/* Location Filter */}
+          <div className="w-2/3">
+            <h3 className="font-semibold">Location</h3>
+            {locations.map((location) => (
+              <label key={location} className="block">
+                <input
+                  type="checkbox"
+                  checked={selectedOptions.location.includes(location)}
+                  onChange={() => handleFilterChange("location", location)}
+                />
+                {location}
+              </label>
+            ))}
+          </div>
         </div>
 
-        <div className="space-y-2">
-          {["Work Type", "Location", "Rating", "Languages"].map((filter) => (
-            <button
-              key={filter}
-              onClick={() => setSelectedFilter(filter)}
-              className={`w-full p-3 rounded-md text-left text-lg ${
-                selectedFilter === filter ? "bg-primary text-white" : "bg-base-100"
-              }`}
-            >
-              {filter}
-            </button>
+        {/* Rating Filter */}
+        <div className="flex">
+          <div className="w-1/3 pr-4">
+            <h3 className="font-semibold">Rating</h3>
+            {ratings.map((rating) => (
+              <label key={rating} className="block">
+                <input
+                  type="checkbox"
+                  checked={selectedOptions.rating.includes(rating)}
+                  onChange={() => handleFilterChange("rating", rating)}
+                />
+                {rating} & above
+              </label>
+            ))}
+          </div>
+
+          {/* Languages Known Filter */}
+          <div className="w-2/3">
+            <h3 className="font-semibold">Languages Known</h3>
+            {languages.map((language) => (
+              <label key={language} className="block">
+                <input
+                  type="checkbox"
+                  checked={selectedOptions.languagesKnown.includes(language)}
+                  onChange={() => handleFilterChange("languagesKnown", language)}
+                />
+                {language}
+              </label>
+            ))}
+          </div>
+        </div>
+
+        {/* Price Filter */}
+        <div>
+          <h3 className="font-semibold">Price</h3>
+          {prices.map((price) => (
+            <label key={price} className="block">
+              <input
+                type="checkbox"
+                checked={selectedOptions.price.includes(price)}
+                onChange={() => handleFilterChange("price", price)}
+              />
+              {price}
+            </label>
           ))}
         </div>
-
-        <div className="mt-6">
-          <button
-            className="w-full p-3 bg-primary text-white text-lg rounded-lg hover:bg-primary-focus"
-            onClick={handleApplyFilters}
-          >
-            Apply Filters
-          </button>
-        </div>
       </div>
 
-      <div className="w-1/2 pl-2">
-        <h4 className="text-lg font-semibold mb-3">{selectedFilter} Options</h4>
-        <div className="space-y-2 text-md">
-          {selectedFilter === "Work Type" &&
-            workTypes.map((option) => (
-              <label key={option} className="flex items-center gap-3 text-lg">
-                <input
-                  type="checkbox"
-                  checked={selectedOptions.workType.includes(option)}
-                  onChange={() => handleOptionChange("workType", option)}
-                  className="w-5 h-5"
-                />
-                {option}
-              </label>
-            ))}
-
-          {selectedFilter === "Location" &&
-            locations.map((option) => (
-              <label key={option} className="flex items-center gap-3 text-lg">
-                <input
-                  type="checkbox"
-                  checked={selectedOptions.location.includes(option)}
-                  onChange={() => handleOptionChange("location", option)}
-                  className="w-5 h-5"
-                />
-                {option}
-              </label>
-            ))}
-
-          {selectedFilter === "Rating" &&
-            ratings.map((option) => (
-              <label key={option} className="flex items-center gap-3 text-lg">
-                <input
-                  type="checkbox"
-                  checked={selectedOptions.rating.includes(option)}
-                  onChange={() => handleOptionChange("rating", option)}
-                  className="w-5 h-5"
-                />
-                {option}+
-              </label>
-            ))}
-
-          {selectedFilter === "Languages" &&
-            languages.map((option) => (
-              <label key={option} className="flex items-center gap-3 text-lg">
-                <input
-                  type="checkbox"
-                  checked={selectedOptions.languagesKnown.includes(option)}
-                  onChange={() => handleOptionChange("languagesKnown", option)}
-                  className="w-5 h-5"
-                />
-                {option}
-              </label>
-            ))}
-        </div>
-      </div>
+      <button
+        className="bg-primary text-white px-4 py-2 rounded mt-4 w-full"
+        onClick={handleApplyFilters}
+      >
+        Apply Filters
+      </button>
     </div>
   );
 };

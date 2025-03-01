@@ -1,9 +1,10 @@
-import React from "react";
+import React,{ useState } from "react";
 import { CheckCircle, XCircle, FileText, BadgeCheck, Phone, User } from "lucide-react"; 
 import { motion } from "framer-motion"; 
 import Navbar from "../../components/Admin/AdminVerificationPage/Navbar";
+import toast from "react-hot-toast";
 
-const vendors = [
+const initialVendors = [
   {
     id: 1,
     name: "John's Plumbing",
@@ -37,14 +38,31 @@ const vendors = [
 ];
 
 const VendorRequests = () => {
-  const handleAccept = (vendorName) => {
-    console.log(`${vendorName} accepted.`);
+  const [vendors, setVendors] = useState(initialVendors);
+
+  // Handle Accept
+  const handleAccept = (vendorId, event) => {
+    event.stopPropagation(); // Prevents multiple event triggers
+    setVendors((prev) =>
+      prev.map((vendor) =>
+        vendor.id === vendorId ? { ...vendor, status: "Accepted" } : vendor
+      )
+    );
+    toast.success("Vendor accepted successfully!");
   };
 
-  const handleReject = (vendorName) => {
-    console.log(`${vendorName} rejected.`);
+  // Handle Reject
+  const handleReject = (vendorId, event) => {
+    event.stopPropagation();
+    setVendors((prev) =>
+      prev.map((vendor) =>
+        vendor.id === vendorId ? { ...vendor, status: "Rejected" } : vendor
+      )
+    );
+    toast.error("Vendor rejected!");
   };
 
+  // Open Image in New Tab
   const handleViewImage = (imageUrl) => {
     window.open(imageUrl, "_blank");
   };
@@ -56,11 +74,11 @@ const VendorRequests = () => {
 
       {/* Page Content */}
       <div className="container mx-auto p-6">
-       <h2 className="text-2xl font-bold text-base-content mb-6 text-center">
+        <h2 className="text-2xl font-bold text-base-content mb-6 text-center">
           Vendor Verification Requests
         </h2>
 
-        {/* List Layout for Vendor Requests (Centered Cards) */}
+        {/* Vendor List */}
         <div className="flex flex-col items-center gap-4">
           {vendors.map((vendor) => (
             <motion.div
@@ -86,7 +104,7 @@ const VendorRequests = () => {
                 </p>
               </div>
 
-              {/* Verification Documents - Side by Side */}
+              {/* Verification Documents */}
               <div className="flex justify-start gap-3 mt-4">
                 <button
                   className="btn btn-outline btn-info text-sm flex items-center gap-2 w-1/2 px-3 py-2"
@@ -102,20 +120,30 @@ const VendorRequests = () => {
                 </button>
               </div>
 
-              {/* Bottom - Action Buttons (Aligned to Right) */}
+              {/* Action Buttons */}
               <div className="flex justify-end gap-4 mt-4">
-                <button
-                  className="btn btn-success text-sm px-3 py-2 flex items-center gap-2"
-                  onClick={() => handleAccept(vendor.name)}
-                >
-                  <CheckCircle className="w-4 h-4" /> Accept
-                </button>
-                <button
-                  className="btn btn-error text-sm px-3 py-2 flex items-center gap-2"
-                  onClick={() => handleReject(vendor.name)}
-                >
-                  <XCircle className="w-4 h-4" /> Reject
-                </button>
+                {vendor.status === "Pending" && (
+                  <>
+                    <button
+                      className="btn btn-success text-sm px-3 py-2 flex items-center gap-2"
+                      onClick={(e) => handleAccept(vendor.id, e)}
+                    >
+                      <CheckCircle className="w-4 h-4" /> Accept
+                    </button>
+                    <button
+                      className="btn btn-error text-sm px-3 py-2 flex items-center gap-2"
+                      onClick={(e) => handleReject(vendor.id, e)}
+                    >
+                      <XCircle className="w-4 h-4" /> Reject
+                    </button>
+                  </>
+                )}
+                {vendor.status === "Accepted" && (
+                  <span className="text-green-600 font-semibold">Accepted ✅</span>
+                )}
+                {vendor.status === "Rejected" && (
+                  <span className="text-red-600 font-semibold">Rejected ❌</span>
+                )}
               </div>
             </motion.div>
           ))}
