@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { LucidePlay, LucideStopCircle, LucideRotateCcw, LucideX } from "lucide-react";
 
-// Modal Component
 const Modal = ({ isOpen, onClose, title, message, onConfirm, confirmText }) => {
   if (!isOpen) return null;
 
@@ -15,15 +14,11 @@ const Modal = ({ isOpen, onClose, title, message, onConfirm, confirmText }) => {
             <LucideX size={20} />
           </button>
         </div>
-        <p className="mb-6 text-gray-600 dark:text-gray-300">{message}</p>
-        <p className="mb-6 font-semibold text-red-500">⚠ Please notify the user before proceeding.</p>
+        <p className="mb-4 text-gray-600 dark:text-gray-300">{message}</p>
+        <p className="mb-4 font-semibold text-red-500">⚠ Notify the user before proceeding.</p>
         <div className="flex justify-end gap-2">
-          <button onClick={onClose} className="btn btn-outline btn-neutral">
-            Cancel
-          </button>
-          <button onClick={onConfirm} className="btn btn-primary">
-            {confirmText}
-          </button>
+          <button onClick={onClose} className="btn btn-outline btn-neutral">Cancel</button>
+          <button onClick={onConfirm} className="btn btn-primary">{confirmText}</button>
         </div>
       </div>
     </div>
@@ -33,16 +28,18 @@ const Modal = ({ isOpen, onClose, title, message, onConfirm, confirmText }) => {
 const WorkTimer = () => {
   const [isRunning, setIsRunning] = useState(false);
   const [time, setTime] = useState(0);
-  const [intervalId, setIntervalId] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalConfig, setModalConfig] = useState({
-    title: "",
-    message: "",
-    confirmText: "Confirm",
-    onConfirm: () => {}
-  });
-
+  const [modalConfig, setModalConfig] = useState({ title: "", message: "", confirmText: "Confirm", onConfirm: () => {} });
   const navigate = useNavigate();
+
+  useEffect(() => {
+    let timer;
+    if (isRunning) {
+      const startTime = Date.now() - time;
+      timer = setInterval(() => setTime(Date.now() - startTime), 10);
+    }
+    return () => clearInterval(timer);
+  }, [isRunning]);
 
   const formatTime = (milliseconds) => {
     const hrs = Math.floor(milliseconds / 3600000);
@@ -57,87 +54,37 @@ const WorkTimer = () => {
     setModalOpen(true);
   };
 
-  const startTimer = () => {
-    openModal("Start Timer", "Please notify the user that the timer is starting.", "Start", () => {
-      if (!isRunning) {
-        setIsRunning(true);
-        const startTime = Date.now() - time;
-        const id = setInterval(() => {
-          setTime(Date.now() - startTime);
-        }, 10);
-        setIntervalId(id);
-      }
-    });
-  };
+  const startTimer = () => openModal("Start Timer", "Notify the user before starting.", "Start", () => {
+    setIsRunning(true);
+    setModalOpen(false);
+  });
 
-  const stopTimer = () => {
-    openModal("Stop Timer", "Please notify the user that the timer is stopping.", "Move to Checkout", () => {
-      clearInterval(intervalId);
-      setIsRunning(false);
-      navigate("/vendor/checkout");
-    });
-  };
+  const stopTimer = () => openModal("Stop Timer", "Confirm stop and move to checkout?", "Checkout", () => {
+    setIsRunning(false);
+    setModalOpen(false);
+    navigate("/vendor/checkout", { state: { timeWorked: time } });
+  });
 
-  const resetTimer = () => {
-    openModal("Reset Timer", "Please notify the user that the timer is being reset.", "Reset", () => {
-      setIsRunning(false);
-      clearInterval(intervalId);
-      setTime(0);
-    });
-  };
+  const resetTimer = () => openModal("Reset Timer", "Confirm timer reset?", "Reset", () => {
+    setIsRunning(false);
+    setTime(0);
+    setModalOpen(false);
+  });
 
   return (
-    <div className="bg-[#1a2332] p-8 rounded-lg shadow-lg mt-8 
-                    border-2 border-transparent 
-                    hover:border-[oklch(var(--p))]  
-                    transition-all duration-300 ease-in-out 
-                    hover:shadow-xl hover:shadow-purple-500/20 
-                    animate-fadeIn flex flex-col items-center relative">
-      
-      {/* Modal */}
-      <Modal 
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        title={modalConfig.title}
-        message={modalConfig.message}
-        confirmText={modalConfig.confirmText}
-        onConfirm={() => {
-          modalConfig.onConfirm();
-          setModalOpen(false);
-        }}
-      />
-
-      {/* Reset Button (Top Right) */}
-      <button 
-        onClick={resetTimer} 
-        className="absolute top-4 right-4 text-yellow-400 hover:text-yellow-500 transition"
-      >
+    <div className="bg-[#1a2332] p-8 rounded-lg shadow-lg mt-8 border-2 border-transparent hover:border-primary transition-all duration-300 ease-in-out flex flex-col items-center relative">
+      <Modal {...modalConfig} isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+      <button onClick={resetTimer} className="absolute top-4 right-4 text-yellow-400 hover:text-yellow-500 transition">
         <LucideRotateCcw size={22} />
       </button>
-
-      {/* Timer Title */}
       <h3 className="text-2xl font-semibold text-primary mb-4">Job Timer</h3>
-
-      {/* Timer Display */}
       <p className="text-5xl font-mono text-gray-300">{formatTime(time)}</p>
-
-      {/* Buttons */}
       <div className="mt-6 flex gap-6">
-        <button
-          onClick={startTimer}
-          className="btn btn-success flex items-center gap-2"
-          disabled={isRunning}
-        >
-          <LucidePlay size={20} />
-          Start
+        <button onClick={startTimer} className={`btn btn-success flex items-center gap-2 ${isRunning ? "opacity-50 cursor-not-allowed" : ""}`} disabled={isRunning}>
+          <LucidePlay size={20} /> Start
         </button>
-        <button
-          onClick={stopTimer}
-          className="btn btn-error flex items-center gap-2"
-          disabled={!isRunning}
-        >
-          <LucideStopCircle size={20} />
-          Stop
+        <button onClick={stopTimer} className={`btn btn-error flex items-center gap-2 ${!isRunning ? "opacity-50 cursor-not-allowed" : ""}`} disabled={!isRunning}>
+          <LucideStopCircle size={20} /> Stop
         </button>
       </div>
     </div>

@@ -13,6 +13,7 @@ const Login = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate(); // Hook for navigation
 
   const navigate = useNavigate(); // Initialize useNavigate
 
@@ -23,7 +24,6 @@ const Login = () => {
   const handleLogin = (e) => {
     e.preventDefault();
 
-    // Check if all fields are filled
     if (!loginData.phone || !loginData.password || !loginData.role) {
       setErrorMessage("All fields are required.");
       return;
@@ -55,7 +55,9 @@ const Login = () => {
 
           <form onSubmit={handleLogin} className="space-y-6">
             <div>
-              <label className="block text-lg font-semibold">Phone Number <span className="text-red-500">*</span></label>
+              <label className="block text-lg font-semibold">
+                Phone Number <span className="text-red-500">*</span>
+              </label>
               <div className="relative">
                 <input
                   type="tel"
@@ -70,7 +72,9 @@ const Login = () => {
             </div>
 
             <div>
-              <label className="block text-lg font-semibold">Password <span className="text-red-500">*</span></label>
+              <label className="block text-lg font-semibold">
+                Password <span className="text-red-500">*</span>
+              </label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -96,7 +100,9 @@ const Login = () => {
             </div>
 
             <div>
-              <label className="block text-lg font-semibold">Role <span className="text-red-500">*</span></label>
+              <label className="block text-lg font-semibold">
+                Role <span className="text-red-500">*</span>
+              </label>
               <div className="relative">
                 <select
                   name="role"

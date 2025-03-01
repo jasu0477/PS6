@@ -1,8 +1,24 @@
 import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
 import QRCode from "react-qr-code";
 import MiniNavbar from "../../components/Others/MiniNavbar"; // Adjust path if needed
 
-const VendorCheckout = ({ totalTime, totalCost, jobDescription }) => {
+const VendorCheckout = () => {
+  const location = useLocation();
+  const { timeWorked = 0 } = location.state || {}; // Get time worked from WorkTimer
+
+  const hourlyRate = 100; // Example rate per hour
+  const perMinuteRate = hourlyRate / 60;
+  const totalMinutes = Math.floor(timeWorked / 60000);
+  const totalCost = totalMinutes * perMinuteRate;
+
+  const formatTime = (milliseconds) => {
+    const hrs = Math.floor(milliseconds / 3600000);
+    const mins = Math.floor((milliseconds % 3600000) / 60000);
+    const secs = Math.floor((milliseconds % 60000) / 1000);
+    return `${hrs.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+  };
+
   const [paymentMethod, setPaymentMethod] = useState("cash");
   const [showToast, setShowToast] = useState(false);
 
@@ -12,7 +28,7 @@ const VendorCheckout = ({ totalTime, totalCost, jobDescription }) => {
 
   const handleConfirmPayment = () => {
     setShowToast(true);
-    
+
     // Hide toast after 3 seconds
     setTimeout(() => {
       setShowToast(false);
@@ -46,9 +62,8 @@ const VendorCheckout = ({ totalTime, totalCost, jobDescription }) => {
           <div className="bg-base-200 p-4 rounded-xl shadow-lg border-2 border-transparent hover:border-primary transition-all duration-300">
             <h3 className="text-lg font-semibold mb-2">Job Summary</h3>
             <div className="bg-base-100 p-3 rounded-lg space-y-2">
-              <p><span className="font-semibold">Total Time:</span> {totalTime}</p>
-              <p><span className="font-semibold">Total Cost:</span> ₹{totalCost}</p>
-              <p><span className="font-semibold">Job Description:</span> {jobDescription}</p>
+              <p><span className="font-semibold">Total Time:</span> {formatTime(timeWorked)}</p>
+              <p><span className="font-semibold">Total Cost:</span> ₹{totalCost.toFixed(2)}</p>
             </div>
           </div>
 
