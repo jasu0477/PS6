@@ -10,9 +10,9 @@ const mockNotifications = [
     location: "Panaji, Goa",
     date: "March 10, 2025",
     time: "10:00 AM",
-    serviceCharge: "₹500",
-    workDescription: "Fixing a leaking pipe in the kitchen",
-    status: "Accepted",
+    serviceCharge: "₹250",
+    workDescription: "fixing pipe",
+    status: "Pending",
   },
   {
     id: 2,
